@@ -99,8 +99,7 @@ class MyMainWindow(QMainWindow):
             take = [takeInfo.item(row, column).text() for column in range(takeInfo.columnCount())]
         take = self.item_to_list(take)
         self.tableDes.setRowCount(len(take))
-        print(take)
-        print(len(self.desStop))
+
         for stop in self.desStop:
             if Stop.stopsVector(take[0], stop):
                 
