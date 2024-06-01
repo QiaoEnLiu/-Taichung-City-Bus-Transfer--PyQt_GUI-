@@ -32,7 +32,7 @@
      <string>輸入公車路線編號：</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="lineEdit_Bus">
     <property name="geometry">
      <rect>
       <x>710</x>
