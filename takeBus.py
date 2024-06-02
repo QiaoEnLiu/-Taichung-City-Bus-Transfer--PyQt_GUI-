@@ -361,7 +361,14 @@ class MyMainWindow(QMainWindow):
         return headers
     #endregion
 
-    #region 將QTableWidget轉成有字典的串列
+if __name__ == "__main__":
+    import sys
+    app = QApplication(sys.argv)
+    window = MyMainWindow()
+    window.show()
+    sys.exit(app.exec_())
+
+#region 將QTableWidget轉成有字典的串列
     # def tableToList(self, table):
     #     result = []
     #     for row in range(table.rowCount()):
@@ -378,9 +385,3 @@ class MyMainWindow(QMainWindow):
     #         result.append(data)
     #     return result
     #endregion
-if __name__ == "__main__":
-    import sys
-    app = QApplication(sys.argv)
-    window = MyMainWindow()
-    window.show()
-    sys.exit(app.exec_())
