@@ -160,6 +160,7 @@ class Stop:
                 
         return sameStops
     #endregion
+    
 
     #region #撘乘站與目的地站相關性
     def stopsVector(take, des):

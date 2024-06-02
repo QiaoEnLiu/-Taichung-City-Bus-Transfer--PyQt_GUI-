@@ -47,7 +47,7 @@
      </font>
     </property>
     <property name="text">
-     <string>臺中車站(D月台)</string>
+     <string>朝陽科技大學</string>
     </property>
    </widget>
    <widget class="QLabel" name="labelDesStep">
@@ -83,7 +83,7 @@
      </font>
     </property>
     <property name="text">
-     <string>朝陽科技大學</string>
+     <string>逢甲大學(福星路)</string>
     </property>
    </widget>
    <widget class="QTableWidget" name="table_TakeInfo">
@@ -97,8 +97,11 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>8</pointsize>
      </font>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::SingleSelection</enum>
     </property>
     <property name="columnCount">
      <number>8</number>
@@ -155,8 +158,11 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>8</pointsize>
      </font>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::SingleSelection</enum>
     </property>
     <property name="columnCount">
      <number>8</number>
@@ -213,8 +219,11 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>8</pointsize>
      </font>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::SingleSelection</enum>
     </property>
     <property name="columnCount">
      <number>8</number>
@@ -271,8 +280,11 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>8</pointsize>
      </font>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::SingleSelection</enum>
     </property>
     <property name="columnCount">
      <number>8</number>
