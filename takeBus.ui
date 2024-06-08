@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1920</width>
-    <height>1080</height>
+    <height>1079</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -92,7 +92,7 @@
       <x>0</x>
       <y>110</y>
       <width>475</width>
-      <height>900</height>
+      <height>450</height>
      </rect>
     </property>
     <property name="font">
@@ -100,8 +100,14 @@
       <pointsize>8</pointsize>
      </font>
     </property>
+    <property name="editTriggers">
+     <set>QAbstractItemView::NoEditTriggers</set>
+    </property>
     <property name="selectionMode">
      <enum>QAbstractItemView::SingleSelection</enum>
+    </property>
+    <property name="selectionBehavior">
+     <enum>QAbstractItemView::SelectRows</enum>
     </property>
     <property name="columnCount">
      <number>8</number>
@@ -153,7 +159,7 @@
       <x>480</x>
       <y>110</y>
       <width>475</width>
-      <height>900</height>
+      <height>450</height>
      </rect>
     </property>
     <property name="font">
@@ -161,8 +167,14 @@
       <pointsize>8</pointsize>
      </font>
     </property>
+    <property name="editTriggers">
+     <set>QAbstractItemView::NoEditTriggers</set>
+    </property>
     <property name="selectionMode">
      <enum>QAbstractItemView::SingleSelection</enum>
+    </property>
+    <property name="selectionBehavior">
+     <enum>QAbstractItemView::SelectRows</enum>
     </property>
     <property name="columnCount">
      <number>8</number>
@@ -214,7 +226,7 @@
       <x>960</x>
       <y>110</y>
       <width>475</width>
-      <height>900</height>
+      <height>450</height>
      </rect>
     </property>
     <property name="font">
@@ -222,8 +234,14 @@
       <pointsize>8</pointsize>
      </font>
     </property>
+    <property name="editTriggers">
+     <set>QAbstractItemView::NoEditTriggers</set>
+    </property>
     <property name="selectionMode">
      <enum>QAbstractItemView::SingleSelection</enum>
+    </property>
+    <property name="selectionBehavior">
+     <enum>QAbstractItemView::SelectRows</enum>
     </property>
     <property name="columnCount">
      <number>8</number>
@@ -275,7 +293,7 @@
       <x>1440</x>
       <y>110</y>
       <width>475</width>
-      <height>900</height>
+      <height>450</height>
      </rect>
     </property>
     <property name="font">
@@ -283,8 +301,14 @@
       <pointsize>8</pointsize>
      </font>
     </property>
+    <property name="editTriggers">
+     <set>QAbstractItemView::NoEditTriggers</set>
+    </property>
     <property name="selectionMode">
      <enum>QAbstractItemView::SingleSelection</enum>
+    </property>
+    <property name="selectionBehavior">
+     <enum>QAbstractItemView::SelectRows</enum>
     </property>
     <property name="columnCount">
      <number>8</number>
@@ -351,7 +375,7 @@
    <widget class="QLabel" name="labelTakeBus">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>0</x>
       <y>90</y>
       <width>125</width>
       <height>20</height>
@@ -369,7 +393,7 @@
    <widget class="QLabel" name="label_ToTF_Bus">
     <property name="geometry">
      <rect>
-      <x>490</x>
+      <x>480</x>
       <y>90</y>
       <width>125</width>
       <height>20</height>
@@ -387,7 +411,7 @@
    <widget class="QLabel" name="label_TF_To_Bus">
     <property name="geometry">
      <rect>
-      <x>970</x>
+      <x>960</x>
       <y>90</y>
       <width>125</width>
       <height>20</height>
@@ -405,7 +429,7 @@
    <widget class="QLabel" name="label_Des">
     <property name="geometry">
      <rect>
-      <x>1450</x>
+      <x>1440</x>
       <y>90</y>
       <width>125</width>
       <height>20</height>
@@ -418,6 +442,30 @@
     </property>
     <property name="text">
      <string>目的地站下車：</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="takeToDesLabel">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>590</y>
+      <width>1891</width>
+      <height>441</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string>撘乘資訊：</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
     </property>
    </widget>
   </widget>
