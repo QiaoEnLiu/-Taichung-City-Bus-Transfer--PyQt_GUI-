@@ -1,6 +1,5 @@
 from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QDialog
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
 
 from FilePath_OOP import FilePath
 from Bus_OOP import Stop, BusLine
@@ -135,6 +134,7 @@ class MyMainWindow(QMainWindow):
                 for j in self.To_TF:
                     if Stop.stopsVector(i,j):
                         self.tableList_Take.append(i) 
+            
 
             self.tableList_Take = self.listToUnduplicated(self.tableList_Take)
             self.list_to_table(self.table_TakeInfo, self.tableList_Take)
@@ -195,6 +195,7 @@ class MyMainWindow(QMainWindow):
         
         self.tableList_To_TF = []
         self.tableList_TF_To = []
+        to_TF_temp=[]
 
         self.table_To_TF_Info.clearContents()
         self.table_TF_To_Info.clearContents()
@@ -210,7 +211,20 @@ class MyMainWindow(QMainWindow):
         self.startTakeInfo = f"\n撘乘：\n{self.take_To_TF}\n"
         for row in self.To_TF:
             if Stop.stopsVector(self.take_To_TF[0], row):
-                self.tableList_To_TF.append(row)
+                to_TF_temp.append(row)
+
+        #region以下為避免找到只有「目的地站往轉乘站」的公車
+        #   應該要找到 「撘乘站-->轉乘站 轉乘站-->目的地站」
+        #   而非有 「撘乘站-->轉乘站 轉乘站<--目的地站」此結果
+        for row_2TF in to_TF_temp:
+            for row_TF2 in self.TF_To:
+                if row_2TF[Stop.stopName_CN] == row_TF2[Stop.stopName_CN]:
+                    for rowDes in self.desInfo.lineStops:
+                        if Stop.stopsVector(row_TF2, rowDes):
+                            self.tableList_To_TF.append(row_2TF)
+        #endregion
+        self.tableList_To_TF = self.listToUnduplicated(self.tableList_To_TF)
+
         self.list_to_table(self.table_To_TF_Info, self.tableList_To_TF)
         self.table_To_TF_Info.itemClicked.connect(self.TF_to)
 
@@ -228,10 +242,10 @@ class MyMainWindow(QMainWindow):
         toDesList=[]
         # print(f"至")
         selectedStop = self.table_To_TF_Info.selectedItems()
-        self.def_From_TF = self.itemAllRow(selectedStop, self.table_To_TF_Info)
-        self.to_tf_Info = f"\n至\n{self.def_From_TF}\n"
+        self.des_From_TF = self.itemAllRow(selectedStop, self.table_To_TF_Info)
+        self.to_tf_Info = f"\n至\n{self.des_From_TF}\n"
         for row in self.TF_To:
-            if self.def_From_TF[0][Stop.stopName_CN] == row[Stop.stopName_CN]:
+            if self.des_From_TF[0][Stop.stopName_CN] == row[Stop.stopName_CN]:
                 self.tableList_TF_To.append(row)
         for take in self.tableList_TF_To:
             for stop in self.desInfo.lineStops:

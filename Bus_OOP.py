@@ -72,7 +72,7 @@ class Stop:
     def readFile(filePath):
         
         busList=[]             
-        with open(filePath,newline='',encoding='big5') as csvFile:   #encoding='utf-8-sig'     
+        with open(filePath,newline='',encoding='utf-8-sig') as csvFile:   #encoding='utf-8-sig'     
             rows=csv.DictReader(csvFile)
             for row in rows:
                 busList.append(row)                       
