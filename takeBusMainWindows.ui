@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>撘乘公車</string>
+   <string>臺中市公車轉乘系統（PyQt5）</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -75,20 +75,8 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0" colspan="2">
-     <widget class="QLabel" name="labelTakeBus">
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>撘乘站公車：</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0" colspan="5">
-     <widget class="QTableWidget" name="table_TakeInfo">
+    <item row="10" column="0" colspan="5">
+     <widget class="QTableWidget" name="tableDes">
       <property name="font">
        <font>
         <pointsize>8</pointsize>
@@ -146,6 +134,79 @@
         <string>緯度</string>
        </property>
       </column>
+     </widget>
+    </item>
+    <item row="6" column="0" colspan="5">
+     <widget class="QTableWidget" name="table_TF_To_Info">
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::SingleSelection</enum>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
+      <property name="columnCount">
+       <number>8</number>
+      </property>
+      <column>
+       <property name="text">
+        <string>路線</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>路線名稱</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>方向</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>站序</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>中文站點名稱</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>英文站點名稱</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>經度</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>緯度</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="2">
+     <widget class="QLabel" name="labelTakeBus">
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>撘乘站公車：</string>
+      </property>
      </widget>
     </item>
     <item row="3" column="0" colspan="2">
@@ -221,20 +282,8 @@
       </column>
      </widget>
     </item>
-    <item row="5" column="0" colspan="2">
-     <widget class="QLabel" name="label_TF_To_Bus">
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>轉乘站公車：</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="0" colspan="5">
-     <widget class="QTableWidget" name="table_TF_To_Info">
+    <item row="2" column="0" colspan="5">
+     <widget class="QTableWidget" name="table_TakeInfo">
       <property name="font">
        <font>
         <pointsize>8</pointsize>
@@ -306,25 +355,76 @@
       </property>
      </widget>
     </item>
-    <item row="8" column="0" colspan="5">
-     <widget class="QTableWidget" name="tableDes">
+    <item row="13" column="0" colspan="5">
+     <widget class="QLabel" name="takeToDesLabel">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <property name="font">
        <font>
-        <pointsize>8</pointsize>
+        <pointsize>12</pointsize>
        </font>
       </property>
+      <property name="layoutDirection">
+       <enum>Qt::RightToLeft</enum>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;
+&lt;head/&gt;
+&lt;body&gt;
+&lt;p&gt;作者：劉喬恩(QiaoEnLiu)&lt;/p&gt;
+&lt;p&gt;
+&lt;a href=&quot;https://github.com/QiaoEnLiu/-Taichung-City-Bus-Transfer--PyQt_GUI-&quot;&gt;
+&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;臺中市公車轉乘系統（PyQt5）&lt;/span&gt;
+&lt;/a&gt;
+&lt;/p&gt;
+&lt;p&gt;
+&lt;a href=&quot;https://github.com/QiaoEnLiu/-Taichung-City-Bus-Transfer-&quot;&gt;
+&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;臺中市公車轉乘系統（Python）&lt;/span&gt;
+&lt;/a&gt;
+&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0" colspan="2">
+     <widget class="QLabel" name="label_TF_To_Bus">
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>轉乘站公車：</string>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="0">
+     <widget class="QLabel" name="labelPath">
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string notr="true">顯示路徑組合：</string>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="0" colspan="5">
+     <widget class="QTableWidget" name="table_Path">
       <property name="editTriggers">
        <set>QAbstractItemView::NoEditTriggers</set>
       </property>
-      <property name="selectionMode">
-       <enum>QAbstractItemView::SingleSelection</enum>
-      </property>
-      <property name="selectionBehavior">
-       <enum>QAbstractItemView::SelectRows</enum>
-      </property>
-      <property name="columnCount">
-       <number>8</number>
-      </property>
+      <column>
+       <property name="text">
+        <string>行為</string>
+       </property>
+      </column>
       <column>
        <property name="text">
         <string>路線</string>
@@ -365,24 +465,6 @@
         <string>緯度</string>
        </property>
       </column>
-     </widget>
-    </item>
-    <item row="9" column="0" colspan="5">
-     <widget class="QLabel" name="takeToDesLabel">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
-      <property name="layoutDirection">
-       <enum>Qt::RightToLeft</enum>
-      </property>
-      <property name="text">
-       <string>撘乘資訊：</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-      </property>
      </widget>
     </item>
    </layout>

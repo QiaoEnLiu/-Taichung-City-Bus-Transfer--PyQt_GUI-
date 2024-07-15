@@ -1,7 +1,9 @@
+import sys
 from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QDesktopWidget, QDialog
 from PyQt5.QtCore import pyqtSlot
 
+import takeBusMainWindows_ui, helloBusDailog_ui
 from FilePath_OOP import FilePath
 from Bus_OOP import Stop, BusLine
 
@@ -12,12 +14,37 @@ from Bus_OOP import Stop, BusLine
 pathDir = FilePath("臺中市市區公車站牌資料", "CSV").path()
 fileList = Stop.readFile(pathDir)
 
-class MyMainWindow(QMainWindow):
-
-    #region 程式讀取UI或XML的圖形介面檔
+class HelloBusDialog(QDialog, helloBusDailog_ui.Ui_Dialog_HelloBus):
     def __init__(self):
         super().__init__()
-        uic.loadUi("takeBus.ui", self) # 載入UI文件
+        self.setupUi(self)
+
+
+class TakeBusMainWindow(QMainWindow, takeBusMainWindows_ui.Ui_takeGUI):
+
+    #region 程式讀取UI或XML的圖形介面檔（GUI）
+    def __init__(self):
+        super().__init__()
+        # uic.loadUi("takeBus.ui", self) 
+        self.setupUi(self) # 載入UI文件
+
+        # region GUI位置
+        # 取得螢幕尺寸
+        screen = QDesktopWidget().screenGeometry()
+        screen_width = screen.width()
+        screen_height = screen.height()
+        
+        # 計算視窗的寬度和高度
+        window_width = screen_width // 2
+        window_height = screen_height
+        
+        # 設置視窗的大小
+        self.resize(window_width, window_height)
+        
+        # 設置視窗的位置
+        # self.move(0, 0)  # 將視窗放在螢幕的左半邊
+        self.move(screen_width // 2, 0) # 視窗放在螢幕的右半邊
+        #endregion
 
         # 初始化UI
         self.initUI()
@@ -27,6 +54,7 @@ class MyMainWindow(QMainWindow):
     def initUI(self):
 
         self.headers = self.get_table_headers(self.table_TakeInfo)
+        self.headersPath_TB = self.get_table_headers(self.table_Path)
         self.takeBTN.clicked.connect(self.takeBus)
     #endregion
 
@@ -76,17 +104,21 @@ class MyMainWindow(QMainWindow):
         self.table_To_TF_Info.clearContents()
         self.table_TF_To_Info.clearContents()
         self.tableDes.clearContents()
+        self.table_Path.clearContents()
 
         self.table_TakeInfo.setRowCount(0)
         self.table_To_TF_Info.setRowCount(0)
         self.table_TF_To_Info.setRowCount(0)
         self.tableDes.setRowCount(0)
+        self.table_Path.setRowCount(0)
 
         self.tableList_Take = []
         self.tableList_To_TF = []
         self.tableList_TF_To = []
 
         self.takeToDesInfo = ""
+        self.pathPhase = "行為"
+        
         #endregion
 
         
@@ -107,7 +139,7 @@ class MyMainWindow(QMainWindow):
                         correctTake.append(i)
                         # print(f"{i[Stop.busID]}[{i[Stop.stopID]}]，",end='')
                         # print(f"到 {j[Stop.stopName_CN]}[{j[Stop.stopID]}] 下車")
-            self.list_to_table(self.table_TakeInfo, correctTake)
+            self.list_to_table(self.table_TakeInfo, correctTake, isShowPath=False)
             self.table_TakeInfo.itemClicked.connect(self.toDes)
 
             #endregion
@@ -151,7 +183,7 @@ class MyMainWindow(QMainWindow):
                         Stop.unduplicateList(self.tableList_Take, i)
             
 
-            self.list_to_table(self.table_TakeInfo, self.tableList_Take)
+            self.list_to_table(self.table_TakeInfo, self.tableList_Take, isShowPath=False)
             #endregion
 
             #region （已停用）找出從轉乘站前往目的地站的公車
@@ -201,6 +233,7 @@ class MyMainWindow(QMainWindow):
             self.table_To_TF_Info.itemClicked.connect(self.TF_to)
             self.table_TF_To_Info.itemClicked.connect(self.toDes)
             self.tableDes.itemClicked.connect(self.reachDes)
+            self.tableDes.itemClicked.connect(self.showPath)
 
             #endregion
 
@@ -222,10 +255,12 @@ class MyMainWindow(QMainWindow):
         self.table_To_TF_Info.clearContents()
         self.table_TF_To_Info.clearContents()
         self.tableDes.clearContents()
+        self.table_Path.clearContents()
 
         self.table_To_TF_Info.setRowCount(0)
         self.table_TF_To_Info.setRowCount(0)
         self.tableDes.setRowCount(0)
+        self.table_Path.setRowCount(0)
 
         selectedBus = self.table_TakeInfo.selectedItems()
         # print(f"撘乘：")
@@ -246,7 +281,7 @@ class MyMainWindow(QMainWindow):
                             Stop.unduplicateList(self.tableList_To_TF, row_2TF)
         #endregion
 
-        self.list_to_table(self.table_To_TF_Info, self.tableList_To_TF)
+        self.list_to_table(self.table_To_TF_Info, self.tableList_To_TF, isShowPath=False)
 
     #endregion
 
@@ -258,22 +293,24 @@ class MyMainWindow(QMainWindow):
         self.tableList_TF_To = []
         self.table_TF_To_Info.clearContents()
         self.tableDes.clearContents()
+        self.table_Path.clearContents()
 
         self.table_TF_To_Info.setRowCount(0)
         self.tableDes.setRowCount(0)
+        self.table_Path.setRowCount(0)
         toDesList=[]
         # print(f"至")
         selectedStop = self.table_To_TF_Info.selectedItems()
-        self.des_From_TF = self.itemAllRow(selectedStop, self.table_To_TF_Info)
-        self.to_tf_Info = f"\n至\n{self.des_From_TF}\n"
+        self.do_TF = self.itemAllRow(selectedStop, self.table_To_TF_Info)
+        self.to_tf_Info = f"\n至\n{self.do_TF}\n"
         for row in self.TF_To:
-            if self.des_From_TF[0][Stop.stopName_CN] == row[Stop.stopName_CN]:
+            if self.do_TF[0][Stop.stopName_CN] == row[Stop.stopName_CN]:
                 self.tableList_TF_To.append(row)
         for take in self.tableList_TF_To:
             for stop in self.desInfo.lineStops:
                 if Stop.stopsVector(take, stop):
                     toDesList.append(take)
-        self.list_to_table(self.table_TF_To_Info, toDesList)
+        self.list_to_table(self.table_TF_To_Info, toDesList, isShowPath=False)
 
     #endregion
 
@@ -283,7 +320,11 @@ class MyMainWindow(QMainWindow):
         print(f"\n---\n(self.toDes)")
 
         self.tableDes.clearContents()
+        self.table_Path.clearContents()
+
         self.tableDes.setRowCount(0)
+        self.table_Path.setRowCount(0)
+
         self.tf_to_info = ""
 
         if self.sameLine:
@@ -299,12 +340,14 @@ class MyMainWindow(QMainWindow):
             take = self.itemAllRow(selectedBus, stopInfo)
             self.tf_to_info = f"\n轉乘：\n{take}\n"
             # print(self.tf_to_info)
-
+        
+        
+        self.tf_to_des = take
         self.tableDes.setRowCount(len(take))
         
         for stop in self.desInfo.lineStops:
             if Stop.stopsVector(take[0], stop):
-                self.listRowToTableItem(self.tableDes, 0, stop)
+                self.listRowToTableItem(self.tableDes, 0, stop, isShowPath=False)
         
     #endregion
 
@@ -314,17 +357,57 @@ class MyMainWindow(QMainWindow):
         print("\n---\n(self.reachDes)\n-------------")
 
         selectedStop = self.tableDes.selectedItems()
+        self.arrivaDes = self.itemAllRow(selectedStop, self.tableDes)
         # print("抵達：")
-        self.reachInfo = f"\n抵達：\n{self.itemAllRow(selectedStop, self.tableDes)}"
+        self.reachInfo = f"\n抵達：\n{self.arrivaDes}"
         self.takeToDesInfo = self.findBus + \
             self.takeBusInfo + self.startTakeInfo + \
                 self.to_tf_Info + self.tf_to_info + \
                     self.reachInfo
-        self.takeToDesLabel.setText(self.takeToDesInfo)
+        # self.takeToDesLabel.setText(self.takeToDesInfo)
         # print(self.takeToDesInfo)
         
 
     #endregion
+
+
+    #region 顯示路徑
+    @pyqtSlot()
+    def showPath(self):
+        print("\n---\n(self.showPath)\n-------------")
+
+        self.table_Path.clearContents()
+        self.table_Path.setRowCount(0)
+
+        takeStr = {self.pathPhase: "撘乘"}
+        to_tf_Str = {self.pathPhase: "到轉乘站"}
+        tf_to_Str = {self.pathPhase: "由轉乘站"}
+        desStr = {self.pathPhase: "到目的地"}
+
+        phase=[]
+
+        self.take_To_TF[0].update(takeStr)
+        phase.append(self.take_To_TF[0])
+
+        if self.sameLine:
+            pass
+        else:
+            self.do_TF[0].update(to_tf_Str)
+            self.tf_to_des[0].update(tf_to_Str)
+
+            phase.append(self.do_TF[0])
+            phase.append(self.tf_to_des[0])
+
+        self.arrivaDes[0].update(desStr)
+        phase.append(self.arrivaDes[0])
+
+        self.list_to_table(self.table_Path, phase, isShowPath=True)
+
+
+    #endregion
+
+    
+
 
     #region 其他方法
 
@@ -339,28 +422,34 @@ class MyMainWindow(QMainWindow):
         if selectedItem:
             row = selectedItem[self.headers.index(Stop.busID)].row()
             rowData = [table.item(row, column).text() for column in range(table.columnCount())]
-            # print(self.item_to_list(rowData))
             return self.item_to_list(rowData)
     #endregion
 
 
     #region 裝有字典的串列顯示到QTableWidget
-    def list_to_table(self, table, list):
+    def list_to_table(self, table, list, isShowPath):
         table.setRowCount(len(list))
         for i, stop in enumerate(list):
-            self.listRowToTableItem(table, i, stop)
+            self.listRowToTableItem(table, i, stop, isShowPath)
     #endregion
 
     #region 字典每個索引對應到相同名稱的QTableWidget欄位
-    def listRowToTableItem(self, table, i, stop):
-        table.setItem(i, self.headers.index(Stop.busID), QTableWidgetItem(stop[Stop.busID]))
-        table.setItem(i, self.headers.index(Stop.busName), QTableWidgetItem(stop[Stop.busName]))
-        table.setItem(i, self.headers.index(Stop.roundTrip), QTableWidgetItem(stop[Stop.roundTrip]))
-        table.setItem(i, self.headers.index(Stop.stopID), QTableWidgetItem(stop[Stop.stopID]))
-        table.setItem(i, self.headers.index(Stop.stopName_CN), QTableWidgetItem(stop[Stop.stopName_CN]))
-        table.setItem(i, self.headers.index(Stop.stopName_EN), QTableWidgetItem(stop[Stop.stopName_EN]))
-        table.setItem(i, self.headers.index(Stop.latitude), QTableWidgetItem(stop[Stop.latitude]))
-        table.setItem(i, self.headers.index(Stop.longitude), QTableWidgetItem(stop[Stop.longitude]))
+    def listRowToTableItem(self, table, i, stop, isShowPath):
+        if isShowPath:
+            headers=self.headersPath_TB
+            table.setItem(i, headers.index(self.pathPhase),
+                          QTableWidgetItem(stop[self.pathPhase]))
+        else:
+            headers=self.headers
+
+        table.setItem(i, headers.index(Stop.busID), QTableWidgetItem(stop[Stop.busID]))
+        table.setItem(i, headers.index(Stop.busName), QTableWidgetItem(stop[Stop.busName]))
+        table.setItem(i, headers.index(Stop.roundTrip), QTableWidgetItem(stop[Stop.roundTrip]))
+        table.setItem(i, headers.index(Stop.stopID), QTableWidgetItem(stop[Stop.stopID]))
+        table.setItem(i, headers.index(Stop.stopName_CN), QTableWidgetItem(stop[Stop.stopName_CN]))
+        table.setItem(i, headers.index(Stop.stopName_EN), QTableWidgetItem(stop[Stop.stopName_EN]))
+        table.setItem(i, headers.index(Stop.latitude), QTableWidgetItem(stop[Stop.latitude]))
+        table.setItem(i, headers.index(Stop.longitude), QTableWidgetItem(stop[Stop.longitude]))
     #endregion
 
     #region 將QTableWidget的列轉成字典並存到串列
@@ -387,12 +476,14 @@ class MyMainWindow(QMainWindow):
 
     #endregion
 
-
-
 if __name__ == "__main__":
-    import sys
+    
     app = QApplication(sys.argv)
-    window = MyMainWindow()
-    window.show()
+    dialog_win = HelloBusDialog()
+
+    if dialog_win.exec_() == QDialog.Accepted:
+        main_win = TakeBusMainWindow()
+        main_win.show()
+
     sys.exit(app.exec_())
 

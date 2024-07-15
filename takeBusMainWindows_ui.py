@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'f:\AnacodaProject\-Taichung-City-Bus-Transfer-(PyQt_GUI)\takeBus.ui'
+# Form implementation generated from reading ui file 'f:\AnacodaProject\-Taichung-City-Bus-Transfer-(PyQt_GUI)\takeBusMainWindows.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -176,9 +176,9 @@ class Ui_takeGUI(object):
         self.label_Des.setObjectName("label_Des")
         self.gridLayout.addWidget(self.label_Des, 7, 0, 1, 2)
         self.takeToDesLabel = QtWidgets.QLabel(self.centralwidget)
-        self.takeToDesLabel.setEnabled(False)
+        self.takeToDesLabel.setEnabled(True)
         font = QtGui.QFont()
-        font.setPointSize(8)
+        font.setPointSize(12)
         self.takeToDesLabel.setFont(font)
         self.takeToDesLabel.setLayoutDirection(QtCore.Qt.RightToLeft)
         self.takeToDesLabel.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
@@ -198,6 +198,7 @@ class Ui_takeGUI(object):
         self.labelPath.setObjectName("labelPath")
         self.gridLayout.addWidget(self.labelPath, 11, 0, 1, 1)
         self.table_Path = QtWidgets.QTableWidget(self.centralwidget)
+        self.table_Path.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.table_Path.setObjectName("table_Path")
         self.table_Path.setColumnCount(9)
         self.table_Path.setRowCount(0)
@@ -234,7 +235,7 @@ class Ui_takeGUI(object):
 
     def retranslateUi(self, takeGUI):
         _translate = QtCore.QCoreApplication.translate
-        takeGUI.setWindowTitle(_translate("takeGUI", "撘乘公車"))
+        takeGUI.setWindowTitle(_translate("takeGUI", "臺中市公車轉乘系統（PyQt5）"))
         self.labelTakeStep.setText(_translate("takeGUI", "撘乘站："))
         self.lineEdit_Take.setText(_translate("takeGUI", "朝陽科技大學"))
         self.labelDesStep.setText(_translate("takeGUI", "目的地站："))
@@ -307,7 +308,22 @@ class Ui_takeGUI(object):
         item = self.table_TakeInfo.horizontalHeaderItem(7)
         item.setText(_translate("takeGUI", "緯度"))
         self.label_Des.setText(_translate("takeGUI", "目的地站下車："))
-        self.takeToDesLabel.setText(_translate("takeGUI", "撘乘資訊："))
+        self.takeToDesLabel.setText(_translate("takeGUI", "<html>\n"
+"<head/>\n"
+"<body>\n"
+"<p>作者：劉喬恩(QiaoEnLiu)</p>\n"
+"<p>\n"
+"<a href=\"https://github.com/QiaoEnLiu/-Taichung-City-Bus-Transfer--PyQt_GUI-\">\n"
+"<span style=\" text-decoration: underline; color:#0000ff;\">臺中市公車轉乘系統（PyQt5）</span>\n"
+"</a>\n"
+"</p>\n"
+"<p>\n"
+"<a href=\"https://github.com/QiaoEnLiu/-Taichung-City-Bus-Transfer-\">\n"
+"<span style=\" text-decoration: underline; color:#0000ff;\">臺中市公車轉乘系統（Python）</span>\n"
+"</a>\n"
+"</p>\n"
+"</body>\n"
+"</html>"))
         self.label_TF_To_Bus.setText(_translate("takeGUI", "轉乘站公車："))
         item = self.table_Path.horizontalHeaderItem(0)
         item.setText(_translate("takeGUI", "行為"))
