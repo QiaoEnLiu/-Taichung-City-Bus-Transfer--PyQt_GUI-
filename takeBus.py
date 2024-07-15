@@ -113,43 +113,47 @@ class MyMainWindow(QMainWindow):
             for i in self.takeInfo.lines:
                 for j in self.desInfo.lines:
                     if i[Stop.stopName_CN] == j[Stop.stopName_CN]: #為轉乘站
-                        self.TF_Stops.append(i)
-                        self.TF_Stops.append(j)
-            self.TF_Stops = self.listToUnduplicated(self.TF_Stops)
+
+                        Stop.unduplicateList(self.To_TF, i) # 撘乘站前往轉乘站的公車
+                        Stop.unduplicateList(self.TF_To, j) # 轉乘站前往目的地站的公車
+                        
         
             #endregion
 
-            #region 找出從撘乘站前往轉乘站的公車
-            
+            #region （已停用）找出從撘乘站前往轉乘站的公車
+            '''
             for i in self.takeInfo.lines:
                 for j in self.TF_Stops:
                     if Stop.stopsVector(i,j):
                         self.To_TF.append(j)
             
             self.To_TF = self.listToUnduplicated(self.To_TF)
+            '''
             #endregion
 
             #region 撘乘站TableWeight條列出可到轉乘站的公車
             for i in self.takeInfo.lineStops:
                 for j in self.To_TF:
                     if Stop.stopsVector(i,j):
-                        self.tableList_Take.append(i) 
+                        Stop.unduplicateList(self.tableList_Take, i)
             
 
-            self.tableList_Take = self.listToUnduplicated(self.tableList_Take)
             self.list_to_table(self.table_TakeInfo, self.tableList_Take)
             #endregion
 
-            #region 找出從轉乘站前往目的地站的公車
+            #region （已停用）找出從轉乘站前往目的地站的公車
+            '''
             for i in self.TF_Stops:
                 for j in self.desInfo.lines:
                     if Stop.stopsVector(i,j):
                         self.TF_To.append(i)
             self.TF_To = self.listToUnduplicated(self.TF_To)
-            
+            '''
+            #endregion
+
+
             self.table_TakeInfo.itemClicked.connect(self.to_TF)
 
-            #endregion
 
             #region Console測試路線組合
             '''
@@ -183,8 +187,11 @@ class MyMainWindow(QMainWindow):
             print("-------------------------")
             '''
             #endregion
+
             #endregion
+
         #endregion
+
         #endregion
 
     #endregion
@@ -221,9 +228,8 @@ class MyMainWindow(QMainWindow):
                 if row_2TF[Stop.stopName_CN] == row_TF2[Stop.stopName_CN]:
                     for rowDes in self.desInfo.lineStops:
                         if Stop.stopsVector(row_TF2, rowDes):
-                            self.tableList_To_TF.append(row_2TF)
+                            Stop.unduplicateList(self.tableList_To_TF, row_2TF)
         #endregion
-        self.tableList_To_TF = self.listToUnduplicated(self.tableList_To_TF)
 
         self.list_to_table(self.table_To_TF_Info, self.tableList_To_TF)
         self.table_To_TF_Info.itemClicked.connect(self.TF_to)
@@ -303,7 +309,7 @@ class MyMainWindow(QMainWindow):
     #endregion
     #region 其他方法
 
-    #region 串列元素不重覆
+    #region （已不使用）串列元素不重覆
     #特別為原始資料的顯示，多數串列為[{}, {}, {}, ...]
     def listToUnduplicated(self, dupList):
         return list({frozenset(item.items()): item for item in dupList}.values())
