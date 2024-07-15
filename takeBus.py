@@ -1,5 +1,6 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
+from PyQt5.QtCore import pyqtSlot
 
 from FilePath_OOP import FilePath
 from Bus_OOP import Stop, BusLine
@@ -12,22 +13,26 @@ pathDir = FilePath("臺中市市區公車站牌資料", "CSV").path()
 fileList = Stop.readFile(pathDir)
 
 class MyMainWindow(QMainWindow):
+
+    #region 程式讀取UI或XML的圖形介面檔
     def __init__(self):
         super().__init__()
         uic.loadUi("takeBus.ui", self) # 載入UI文件
 
         # 初始化UI
         self.initUI()
+    #endregion
 
+    #region 其他初始化
     def initUI(self):
 
         self.headers = self.get_table_headers(self.table_TakeInfo)
         self.takeBTN.clicked.connect(self.takeBus)
-
+    #endregion
 
     #region 撘公車
     def takeBus(self):
-        print("(self.takeBus)")
+        print("\n-------------\n(self.takeBus)")
         #region 目的地及撘乘站
         self.desInfo=BusLine() #目的地站站點相關串列
         self.takeInfo=BusLine() #撘乘站站點相關串列
@@ -43,14 +48,22 @@ class MyMainWindow(QMainWindow):
             
         #endregion
 
+        self.takeToDesInfo=""
+        self.findBus=""
+        self.takeBusInfo=""
+        self.startTakeInfo=""
+        self.to_tf_Info=""
+        self.tf_to_info=""
+        self.reachInfo=""
+
 
         #region 目的地站點及撘乘站點各公車及其路線延站
-        self.des = self.lineEdit_Des.text() #臺中車站(D月台)、逢甲大學(福星路)
+        self.des = self.lineEdit_Des.text() # 國立臺中科技大學、逢甲大學(福星路)
         self.desInfo.busesID=Stop.IDsAtStop(self.des, fileList)
         self.desInfo.lineStops=Stop.busesAtStop(self.des, fileList)
         
         
-        self.take = self.lineEdit_Take.text() #朝陽科技大學
+        self.take = self.lineEdit_Take.text() # 朝陽科技大學
         self.takeInfo.busesID=Stop.IDsAtStop(self.take, fileList)      
         self.takeInfo.lineStops=Stop.busesAtStop(self.take, fileList)
 
@@ -151,10 +164,6 @@ class MyMainWindow(QMainWindow):
             '''
             #endregion
 
-
-            self.table_TakeInfo.itemClicked.connect(self.to_TF)
-
-
             #region Console測試路線組合
             '''
             tempBus=""
@@ -188,6 +197,11 @@ class MyMainWindow(QMainWindow):
             '''
             #endregion
 
+            self.table_TakeInfo.itemClicked.connect(self.to_TF)
+            self.table_To_TF_Info.itemClicked.connect(self.TF_to)
+            self.table_TF_To_Info.itemClicked.connect(self.toDes)
+            self.tableDes.itemClicked.connect(self.reachDes)
+
             #endregion
 
         #endregion
@@ -197,8 +211,9 @@ class MyMainWindow(QMainWindow):
     #endregion
 
     #region 列出抵達轉乘站的公車
+    @pyqtSlot()
     def to_TF(self):
-        print(f"\n(self.to_TF)")
+        print(f"\n---\n(self.to_TF)")
         
         self.tableList_To_TF = []
         self.tableList_TF_To = []
@@ -232,13 +247,14 @@ class MyMainWindow(QMainWindow):
         #endregion
 
         self.list_to_table(self.table_To_TF_Info, self.tableList_To_TF)
-        self.table_To_TF_Info.itemClicked.connect(self.TF_to)
 
     #endregion
 
     #region 列出由轉乘站發車的公車
+    @pyqtSlot()
     def TF_to(self):
-        print(f"\n(self.TF_to)")
+        print(f"\n---\n(self.TF_to)")
+
         self.tableList_TF_To = []
         self.table_TF_To_Info.clearContents()
         self.tableDes.clearContents()
@@ -258,13 +274,14 @@ class MyMainWindow(QMainWindow):
                 if Stop.stopsVector(take, stop):
                     toDesList.append(take)
         self.list_to_table(self.table_TF_To_Info, toDesList)
-        self.table_TF_To_Info.itemClicked.connect(self.toDes)
 
     #endregion
 
     #region 列出抵達目的地車的公車
+    @pyqtSlot()
     def toDes(self):
-        print(f"\n(self.toDes)")
+        print(f"\n---\n(self.toDes)")
+
         self.tableDes.clearContents()
         self.tableDes.setRowCount(0)
         self.tf_to_info = ""
@@ -272,29 +289,30 @@ class MyMainWindow(QMainWindow):
         if self.sameLine:
             stopInfo = self.table_TakeInfo
             selectedBus = self.table_TakeInfo.selectedItems()
+            take = self.itemAllRow(selectedBus, stopInfo)
 
         else:
             stopInfo = self.table_TF_To_Info
             selectedBus = self.table_TF_To_Info.selectedItems()
-            # print(f"轉乘：")
+            # print(f"轉乘：{selectedBus}")
          
             take = self.itemAllRow(selectedBus, stopInfo)
-            self.tf_to_info += f"\n轉乘：\n{take}\n"
+            self.tf_to_info = f"\n轉乘：\n{take}\n"
+            # print(self.tf_to_info)
 
         self.tableDes.setRowCount(len(take))
         
         for stop in self.desInfo.lineStops:
             if Stop.stopsVector(take[0], stop):
                 self.listRowToTableItem(self.tableDes, 0, stop)
-
-        self.tableDes.itemClicked.connect(self.reachDes)
-
         
     #endregion
 
     #region 抵達目的地
+    @pyqtSlot()
     def reachDes(self):
-        print("\n(self.reachDes)")
+        print("\n---\n(self.reachDes)\n-------------")
+
         selectedStop = self.tableDes.selectedItems()
         # print("抵達：")
         self.reachInfo = f"\n抵達：\n{self.itemAllRow(selectedStop, self.tableDes)}"
@@ -307,6 +325,7 @@ class MyMainWindow(QMainWindow):
         
 
     #endregion
+
     #region 其他方法
 
     #region （已不使用）串列元素不重覆
