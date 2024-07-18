@@ -14,12 +14,14 @@ from Bus_OOP import Stop, BusLine
 pathDir = FilePath("臺中市市區公車站牌資料", "CSV").path()
 fileList = Stop.readFile(pathDir)
 
+#region 「哈囉你好嗎？…………中興幹線」初始對話框
 class HelloBusDialog(QDialog, helloBusDailog_ui.Ui_Dialog_HelloBus):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+#endregion
 
-
+#region 主視窗
 class TakeBusMainWindow(QMainWindow, takeBusMainWindows_ui.Ui_takeGUI):
 
     #region 程式讀取UI或XML的圖形介面檔（GUI）
@@ -86,12 +88,12 @@ class TakeBusMainWindow(QMainWindow, takeBusMainWindows_ui.Ui_takeGUI):
 
 
         #region 目的地站點及撘乘站點各公車及其路線延站
-        self.des = self.lineEdit_Des.text() # 國立臺中科技大學、逢甲大學(福星路)
+        self.des = self.lineEdit_Des.text()
         self.desInfo.busesID=Stop.IDsAtStop(self.des, fileList)
         self.desInfo.lineStops=Stop.busesAtStop(self.des, fileList)
         
         
-        self.take = self.lineEdit_Take.text() # 朝陽科技大學
+        self.take = self.lineEdit_Take.text()
         self.takeInfo.busesID=Stop.IDsAtStop(self.take, fileList)      
         self.takeInfo.lineStops=Stop.busesAtStop(self.take, fileList)
 
@@ -100,17 +102,11 @@ class TakeBusMainWindow(QMainWindow, takeBusMainWindows_ui.Ui_takeGUI):
         #endregion
         
         #region 初始化
-        self.table_TakeInfo.clearContents()
-        self.table_To_TF_Info.clearContents()
-        self.table_TF_To_Info.clearContents()
-        self.tableDes.clearContents()
-        self.table_Path.clearContents()
-
-        self.table_TakeInfo.setRowCount(0)
-        self.table_To_TF_Info.setRowCount(0)
-        self.table_TF_To_Info.setRowCount(0)
-        self.tableDes.setRowCount(0)
-        self.table_Path.setRowCount(0)
+        self.cleanTable(self.table_TakeInfo)
+        self.cleanTable(self.table_To_TF_Info)
+        self.cleanTable(self.table_TF_To_Info)
+        self.cleanTable(self.tableDes)
+        self.cleanTable(self.table_Path)
 
         self.tableList_Take = []
         self.tableList_To_TF = []
@@ -121,6 +117,12 @@ class TakeBusMainWindow(QMainWindow, takeBusMainWindows_ui.Ui_takeGUI):
         
         #endregion
 
+
+        self.table_TakeInfo.itemClicked.connect(self.to_TF)
+        self.table_To_TF_Info.itemClicked.connect(self.TF_to)
+        self.table_TF_To_Info.itemClicked.connect(self.toDes)
+        self.tableDes.itemClicked.connect(self.reachDes)
+        self.tableDes.itemClicked.connect(self.showPath)
         
         #region 開始找公車撘
         #region 兩站是否在同一條路線上
@@ -229,13 +231,10 @@ class TakeBusMainWindow(QMainWindow, takeBusMainWindows_ui.Ui_takeGUI):
             '''
             #endregion
 
-            self.table_TakeInfo.itemClicked.connect(self.to_TF)
-            self.table_To_TF_Info.itemClicked.connect(self.TF_to)
-            self.table_TF_To_Info.itemClicked.connect(self.toDes)
-            self.tableDes.itemClicked.connect(self.reachDes)
-            self.tableDes.itemClicked.connect(self.showPath)
+            
 
             #endregion
+
 
         #endregion
 
@@ -252,15 +251,10 @@ class TakeBusMainWindow(QMainWindow, takeBusMainWindows_ui.Ui_takeGUI):
         self.tableList_TF_To = []
         to_TF_temp=[]
 
-        self.table_To_TF_Info.clearContents()
-        self.table_TF_To_Info.clearContents()
-        self.tableDes.clearContents()
-        self.table_Path.clearContents()
-
-        self.table_To_TF_Info.setRowCount(0)
-        self.table_TF_To_Info.setRowCount(0)
-        self.tableDes.setRowCount(0)
-        self.table_Path.setRowCount(0)
+        self.cleanTable(self.table_To_TF_Info)
+        self.cleanTable(self.table_TF_To_Info)
+        self.cleanTable(self.tableDes)
+        self.cleanTable(self.table_Path)
 
         selectedBus = self.table_TakeInfo.selectedItems()
         # print(f"撘乘：")
@@ -291,13 +285,11 @@ class TakeBusMainWindow(QMainWindow, takeBusMainWindows_ui.Ui_takeGUI):
         print(f"\n---\n(self.TF_to)")
 
         self.tableList_TF_To = []
-        self.table_TF_To_Info.clearContents()
-        self.tableDes.clearContents()
-        self.table_Path.clearContents()
 
-        self.table_TF_To_Info.setRowCount(0)
-        self.tableDes.setRowCount(0)
-        self.table_Path.setRowCount(0)
+        self.cleanTable(self.table_TF_To_Info)
+        self.cleanTable(self.tableDes)
+        self.cleanTable(self.table_Path)
+
         toDesList=[]
         # print(f"至")
         selectedStop = self.table_To_TF_Info.selectedItems()
@@ -319,11 +311,8 @@ class TakeBusMainWindow(QMainWindow, takeBusMainWindows_ui.Ui_takeGUI):
     def toDes(self):
         print(f"\n---\n(self.toDes)")
 
-        self.tableDes.clearContents()
-        self.table_Path.clearContents()
-
-        self.tableDes.setRowCount(0)
-        self.table_Path.setRowCount(0)
+        self.cleanTable(self.tableDes)
+        self.cleanTable(self.table_Path)
 
         self.tf_to_info = ""
 
@@ -376,8 +365,7 @@ class TakeBusMainWindow(QMainWindow, takeBusMainWindows_ui.Ui_takeGUI):
     def showPath(self):
         print("\n---\n(self.showPath)\n-------------")
 
-        self.table_Path.clearContents()
-        self.table_Path.setRowCount(0)
+        self.cleanTable(self.table_Path)
 
         takeStr = {self.pathPhase: "撘乘"}
         to_tf_Str = {self.pathPhase: "到轉乘站"}
@@ -411,6 +399,23 @@ class TakeBusMainWindow(QMainWindow, takeBusMainWindows_ui.Ui_takeGUI):
 
     #region 其他方法
 
+    #region 取得QTableWidget所有的欄位名稱
+    def get_table_headers(self, table):
+        headers = []
+        for col in range(table.columnCount()):
+            header_item = table.horizontalHeaderItem(col)
+            if header_item:
+                headers.append(header_item.text())
+        return headers
+    #endregion
+
+    #region Table資料清除
+    def cleanTable(self, table):
+        table.clearContents()
+        table.setRowCount(0)
+
+    #endregion
+
     #region （已不使用）串列元素不重覆
     #特別為原始資料的顯示，多數串列為[{}, {}, {}, ...]
     def listToUnduplicated(self, dupList):
@@ -425,6 +430,18 @@ class TakeBusMainWindow(QMainWindow, takeBusMainWindows_ui.Ui_takeGUI):
             return self.item_to_list(rowData)
     #endregion
 
+    #region 將QTableWidget的列轉成字典並存到串列
+    def item_to_list(self, data):
+        # 檢查是否有資料
+        if not data:
+            return []
+
+        # 創建包含字典的列表
+        dict_list = [{header: value for header, value in zip(self.headers, data)}]
+
+        return dict_list
+    #endregion
+
 
     #region 裝有字典的串列顯示到QTableWidget
     def list_to_table(self, table, list, isShowPath):
@@ -433,7 +450,7 @@ class TakeBusMainWindow(QMainWindow, takeBusMainWindows_ui.Ui_takeGUI):
             self.listRowToTableItem(table, i, stop, isShowPath)
     #endregion
 
-    #region 字典每個索引對應到相同名稱的QTableWidget欄位
+    #region 字典每個索引對應到相同名稱的QTableWidget欄位，並將資料加入
     def listRowToTableItem(self, table, i, stop, isShowPath):
         if isShowPath:
             headers=self.headersPath_TB
@@ -452,29 +469,9 @@ class TakeBusMainWindow(QMainWindow, takeBusMainWindows_ui.Ui_takeGUI):
         table.setItem(i, headers.index(Stop.longitude), QTableWidgetItem(stop[Stop.longitude]))
     #endregion
 
-    #region 將QTableWidget的列轉成字典並存到串列
-    def item_to_list(self, data):
-        # 檢查是否有資料
-        if not data:
-            return []
-
-        # 創建包含字典的列表
-        dict_list = [{header: value for header, value in zip(self.headers, data)}]
-
-        return dict_list
     #endregion
 
-    #region 列出QTableWidget所有的欄位名稱
-    def get_table_headers(self, table):
-        headers = []
-        for col in range(table.columnCount()):
-            header_item = table.horizontalHeaderItem(col)
-            if header_item:
-                headers.append(header_item.text())
-        return headers
-    #endregion
-
-    #endregion
+#endregion
 
 if __name__ == "__main__":
     
