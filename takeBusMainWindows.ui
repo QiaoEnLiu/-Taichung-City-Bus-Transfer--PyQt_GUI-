@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1300</width>
-    <height>1250</height>
+    <width>1050</width>
+    <height>1268</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,361 +15,477 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QLabel" name="labelTakeStep">
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>撘乘站：</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QLineEdit" name="lineEdit_Take">
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>朝陽科技大學</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="2">
-     <widget class="QLabel" name="labelDesStep">
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>目的地站：</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="3">
-     <widget class="QLineEdit" name="lineEdit_Des">
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>逢甲大學(福星路)</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="4">
-     <widget class="QPushButton" name="takeBTN">
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>查詢公車路線</string>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="0" colspan="5">
-     <widget class="QTableWidget" name="tableDes">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
-      <property name="selectionMode">
-       <enum>QAbstractItemView::SingleSelection</enum>
-      </property>
-      <property name="selectionBehavior">
-       <enum>QAbstractItemView::SelectRows</enum>
-      </property>
-      <property name="columnCount">
-       <number>8</number>
-      </property>
-      <column>
-       <property name="text">
-        <string>路線</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>路線名稱</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>方向</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>站序</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>中文站點名稱</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>英文站點名稱</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>經度</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>緯度</string>
-       </property>
-      </column>
-     </widget>
-    </item>
-    <item row="6" column="0" colspan="5">
-     <widget class="QTableWidget" name="table_TF_To_Info">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
-      <property name="selectionMode">
-       <enum>QAbstractItemView::SingleSelection</enum>
-      </property>
-      <property name="selectionBehavior">
-       <enum>QAbstractItemView::SelectRows</enum>
-      </property>
-      <property name="columnCount">
-       <number>8</number>
-      </property>
-      <column>
-       <property name="text">
-        <string>路線</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>路線名稱</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>方向</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>站序</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>中文站點名稱</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>英文站點名稱</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>經度</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>緯度</string>
-       </property>
-      </column>
-     </widget>
-    </item>
-    <item row="1" column="0" colspan="2">
-     <widget class="QLabel" name="labelTakeBus">
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>撘乘站公車：</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0" colspan="2">
-     <widget class="QLabel" name="label_ToTF_Bus">
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>抵達轉乘站公車：</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0" colspan="5">
-     <widget class="QTableWidget" name="table_To_TF_Info">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
-      <property name="selectionMode">
-       <enum>QAbstractItemView::SingleSelection</enum>
-      </property>
-      <property name="selectionBehavior">
-       <enum>QAbstractItemView::SelectRows</enum>
-      </property>
-      <property name="columnCount">
-       <number>8</number>
-      </property>
-      <column>
-       <property name="text">
-        <string>路線</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>路線名稱</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>方向</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>站序</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>中文站點名稱</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>英文站點名稱</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>經度</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>緯度</string>
-       </property>
-      </column>
-     </widget>
-    </item>
-    <item row="2" column="0" colspan="5">
-     <widget class="QTableWidget" name="table_TakeInfo">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
-      <property name="selectionMode">
-       <enum>QAbstractItemView::SingleSelection</enum>
-      </property>
-      <property name="selectionBehavior">
-       <enum>QAbstractItemView::SelectRows</enum>
-      </property>
-      <property name="columnCount">
-       <number>8</number>
-      </property>
-      <column>
-       <property name="text">
-        <string>路線</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>路線名稱</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>方向</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>站序</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>中文站點名稱</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>英文站點名稱</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>經度</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>緯度</string>
-       </property>
-      </column>
-     </widget>
-    </item>
-    <item row="7" column="0" colspan="2">
-     <widget class="QLabel" name="label_Des">
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>目的地站下車：</string>
-      </property>
-     </widget>
-    </item>
-    <item row="13" column="0" colspan="5">
-     <widget class="QLabel" name="takeToDesLabel">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="layoutDirection">
-       <enum>Qt::RightToLeft</enum>
-      </property>
-      <property name="text">
-       <string>&lt;html&gt;
+    <item row="1" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <layout class="QHBoxLayout" name="inputStopLayout">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="labelTakeStep">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>撘乘站：</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEdit_Take">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>朝陽科技大學</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="labelDesStep">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>目的地站：</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEdit_Des">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>逢甲大學(福星路)</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="takeBTN">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>查詢公車路線</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="takeBusLayout">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="labelTakeBus">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>撘乘站公車：</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="table_TakeInfo">
+          <property name="font">
+           <font>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+          <property name="columnCount">
+           <number>8</number>
+          </property>
+          <column>
+           <property name="text">
+            <string>路線</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>路線名稱</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>方向</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>站序</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>中文站點名稱</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>英文站點名稱</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>經度</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>緯度</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="to_TF_Layout">
+        <item>
+         <widget class="QLabel" name="label_ToTF_Bus">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>抵達轉乘站公車：</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="table_To_TF_Info">
+          <property name="font">
+           <font>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+          <property name="columnCount">
+           <number>8</number>
+          </property>
+          <column>
+           <property name="text">
+            <string>路線</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>路線名稱</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>方向</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>站序</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>中文站點名稱</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>英文站點名稱</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>經度</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>緯度</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="TF_to_Layout">
+        <item>
+         <widget class="QLabel" name="label_TF_To_Bus">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>轉乘站公車：</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="table_TF_To_Info">
+          <property name="font">
+           <font>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+          <property name="columnCount">
+           <number>8</number>
+          </property>
+          <column>
+           <property name="text">
+            <string>路線</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>路線名稱</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>方向</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>站序</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>中文站點名稱</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>英文站點名稱</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>經度</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>緯度</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="to_Des_Lyaout">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="label_Des">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>目的地站下車：</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="tableDes">
+          <property name="font">
+           <font>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+          <property name="columnCount">
+           <number>8</number>
+          </property>
+          <column>
+           <property name="text">
+            <string>路線</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>路線名稱</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>方向</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>站序</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>中文站點名稱</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>英文站點名稱</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>經度</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>緯度</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="path_Layout">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="labelPath">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string notr="true">顯示路徑組合：</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="table_Path">
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <column>
+           <property name="text">
+            <string>行為</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>路線</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>路線名稱</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>方向</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>站序</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>中文站點名稱</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>英文站點名稱</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>經度</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>緯度</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="otherLayout">
+        <item>
+         <widget class="QLabel" name="takeToDesLabel">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::RightToLeft</enum>
+          </property>
+          <property name="text">
+           <string>&lt;html&gt;
 &lt;head/&gt;
 &lt;body&gt;
 &lt;p&gt;作者：劉喬恩(QiaoEnLiu)&lt;/p&gt;
@@ -385,87 +501,15 @@
 &lt;/p&gt;
 &lt;/body&gt;
 &lt;/html&gt;</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="0" colspan="2">
-     <widget class="QLabel" name="label_TF_To_Bus">
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>轉乘站公車：</string>
-      </property>
-     </widget>
-    </item>
-    <item row="11" column="0">
-     <widget class="QLabel" name="labelPath">
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string notr="true">顯示路徑組合：</string>
-      </property>
-     </widget>
-    </item>
-    <item row="12" column="0" colspan="5">
-     <widget class="QTableWidget" name="table_Path">
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
-      <column>
-       <property name="text">
-        <string>行為</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>路線</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>路線名稱</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>方向</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>站序</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>中文站點名稱</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>英文站點名稱</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>經度</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>緯度</string>
-       </property>
-      </column>
-     </widget>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -474,7 +518,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1300</width>
+     <width>1050</width>
      <height>21</height>
     </rect>
    </property>
