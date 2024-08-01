@@ -267,12 +267,13 @@ class TakeBusMainWindow(QMainWindow, takeBusMainWindows_ui.Ui_takeGUI):
         #region以下為避免找到只有「目的地站往轉乘站」的公車
         #   應該要找到 「撘乘站-->轉乘站 轉乘站-->目的地站」
         #   而非有 「撘乘站-->轉乘站 轉乘站<--目的地站」此結果
-        for row_2TF in to_TF_temp:
-            for row_TF2 in self.TF_To:
-                if row_2TF[Stop.stopName_CN] == row_TF2[Stop.stopName_CN]:
-                    for rowDes in self.desInfo.lineStops:
-                        if Stop.stopsVector(row_TF2, rowDes):
-                            Stop.unduplicateList(self.tableList_To_TF, row_2TF)
+
+        for row_2TF in to_TF_temp: # 到轉乘站的公車
+            for row_TF2 in self.TF_To: # 到目的地站的轉乘站的公車
+                if row_2TF[Stop.stopName_CN] == row_TF2[Stop.stopName_CN]: # 換乘（同一站換撘）
+                    for rowDes in self.desInfo.lineStops: # 到目的地站的公車
+                        if Stop.stopsVector(row_TF2, rowDes): # 由轉乘站到目的地站
+                            Stop.unduplicateList(self.tableList_To_TF, row_2TF) 
         #endregion
 
         self.list_to_table(self.table_To_TF_Info, self.tableList_To_TF, isShowPath=False)
@@ -317,11 +318,13 @@ class TakeBusMainWindow(QMainWindow, takeBusMainWindows_ui.Ui_takeGUI):
         self.tf_to_info = ""
 
         if self.sameLine:
+            # 可直達
             stopInfo = self.table_TakeInfo
             selectedBus = self.table_TakeInfo.selectedItems()
             take = self.itemAllRow(selectedBus, stopInfo)
 
         else:
+            # 要轉乘
             stopInfo = self.table_TF_To_Info
             selectedBus = self.table_TF_To_Info.selectedItems()
             # print(f"轉乘：{selectedBus}")
