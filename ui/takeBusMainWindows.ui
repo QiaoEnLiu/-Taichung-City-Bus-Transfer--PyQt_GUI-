@@ -472,6 +472,33 @@
       <item>
        <layout class="QVBoxLayout" name="otherLayout">
         <item>
+         <widget class="QLabel" name="authorLabel">
+          <property name="text">
+           <string>作者：劉喬恩(QiaoEnLiu)</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="transferSysLink1">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/QiaoEnLiu/-Taichung-City-Bus-Transfer-&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;臺中市公車轉乘系統（Python） &lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="openExternalLinks">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="transferSysLink2">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/QiaoEnLiu/-Taichung-City-Bus-Transfer--PyQt_GUI-&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;臺中市公車轉乘系統（PyQt5）&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="openExternalLinks">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QLabel" name="takeToDesLabel">
           <property name="enabled">
            <bool>true</bool>
@@ -485,22 +512,7 @@
            <enum>Qt::RightToLeft</enum>
           </property>
           <property name="text">
-           <string>&lt;html&gt;
-&lt;head/&gt;
-&lt;body&gt;
-&lt;p&gt;作者：劉喬恩(QiaoEnLiu)&lt;/p&gt;
-&lt;p&gt;
-&lt;a href=&quot;https://github.com/QiaoEnLiu/-Taichung-City-Bus-Transfer--PyQt_GUI-&quot;&gt;
-&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;臺中市公車轉乘系統（PyQt5）&lt;/span&gt;
-&lt;/a&gt;
-&lt;/p&gt;
-&lt;p&gt;
-&lt;a href=&quot;https://github.com/QiaoEnLiu/-Taichung-City-Bus-Transfer-&quot;&gt;
-&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;臺中市公車轉乘系統（Python）&lt;/span&gt;
-&lt;/a&gt;
-&lt;/p&gt;
-&lt;/body&gt;
-&lt;/html&gt;</string>
+           <string/>
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>

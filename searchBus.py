@@ -8,7 +8,7 @@ from Bus_OOP import Stop
 class MyMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi("searchBus.ui", self) # 載入UI文件
+        uic.loadUi("ui/searchBus.ui", self) # 載入UI文件
 
         # 初始化UI
         self.initUI()

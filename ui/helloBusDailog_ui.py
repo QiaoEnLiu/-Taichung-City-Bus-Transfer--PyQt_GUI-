@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'f:\AnacodaProject\-Taichung-City-Bus-Transfer-(PyQt_GUI)\helloBusDailog.ui'
+# Form implementation generated from reading ui file 'f:\AnacodaProject\-Taichung-City-Bus-Transfer-(PyQt_GUI)\ui\helloBusDailog.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Dialog_HelloBus(object):
     def setupUi(self, Dialog_HelloBus):
         Dialog_HelloBus.setObjectName("Dialog_HelloBus")
-        Dialog_HelloBus.resize(520, 300)
+        Dialog_HelloBus.resize(504, 192)
         self.verticalLayout = QtWidgets.QVBoxLayout(Dialog_HelloBus)
         self.verticalLayout.setObjectName("verticalLayout")
         self.label_HelloBusPicture = QtWidgets.QLabel(Dialog_HelloBus)

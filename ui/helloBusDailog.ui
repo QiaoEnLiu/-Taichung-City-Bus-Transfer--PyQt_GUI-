@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>520</width>
-    <height>300</height>
+    <width>504</width>
+    <height>192</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="Resource/helloBus.qrc">:/helloBus/中興幹線.png</pixmap>
+      <pixmap resource="../Resource/helloBus.qrc">:/helloBus/中興幹線.png</pixmap>
      </property>
     </widget>
    </item>
@@ -37,6 +37,7 @@
   </layout>
  </widget>
  <resources>
+  <include location="../Resource/helloBus.qrc"/>
   <include location="Resource/helloBus.qrc"/>
  </resources>
  <connections>

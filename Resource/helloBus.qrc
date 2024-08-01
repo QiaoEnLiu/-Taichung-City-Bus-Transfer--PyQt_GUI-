@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="helloBus">
+    <file>helloBus.qrc</file>
     <file>中興幹線.png</file>
   </qresource>
 </RCC>

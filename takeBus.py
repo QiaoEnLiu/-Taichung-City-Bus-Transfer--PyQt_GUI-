@@ -3,7 +3,7 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QDesktopWidget, QDialog
 from PyQt5.QtCore import pyqtSlot
 
-import takeBusMainWindows_ui, helloBusDailog_ui
+import ui.takeBusMainWindows_ui, ui.helloBusDailog_ui
 from FilePath_OOP import FilePath
 from Bus_OOP import Stop, BusLine
 
@@ -15,14 +15,14 @@ pathDir = FilePath("臺中市市區公車站牌資料", "CSV").path()
 fileList = Stop.readFile(pathDir)
 
 #region 「哈囉你好嗎？…………中興幹線」初始對話框
-class HelloBusDialog(QDialog, helloBusDailog_ui.Ui_Dialog_HelloBus):
+class HelloBusDialog(QDialog, ui.helloBusDailog_ui.Ui_Dialog_HelloBus):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
 #endregion
 
 #region 主視窗
-class TakeBusMainWindow(QMainWindow, takeBusMainWindows_ui.Ui_takeGUI):
+class TakeBusMainWindow(QMainWindow, ui.takeBusMainWindows_ui.Ui_takeGUI):
 
     #region 程式讀取UI或XML的圖形介面檔（GUI）
     def __init__(self):
