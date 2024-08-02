@@ -20,26 +20,7 @@ class BusLine:
 
 #region 與站點互動功能
 class Stop:
-    
-    #Resource/臺中市市區公車站牌資料.CSV    
-    
-    #region
-
-    '''
-    def __init__(self,busID,busName,roundTrip,stopID,stopName_CN,stopName_EN,latitude,longitude): #針對公車CSV檔欄位所呈現的物件Bus，但目前用不到
-                
-        self.busID=busID #路線：路線編號
-        self.busName=busName #路線名稱：名稱為「端點A站 - 端點B站」
-        self.roundTrip=roundTrip #方向：路線名稱「端點A站 - 端點B站」為去程(outbound)，「端點A站」為發車站，站序1；而回程(inbound)以「端點B站」發車，「端點B站」站序為1，為回程發車站
-        self.stop=stopID #站序：發車站點（端點）為1，數字遞增為行車方向，也可稱「向量」
-        self.stopName_CN=stopName_CN #中文站點名稱
-        self.stopName_EN=stopName_EN #English Stop Name
-        self.latitude=latitude #經度
-        self.longitude=longitude #緯度
-        
-        '''
-    #endregion
-
+       
     #region 欄位名稱
     def __init__(self):
         self.busID='路線' #路線：路線編號 / Stop.busID
@@ -70,6 +51,7 @@ class Stop:
 
     #region 讀CSV檔
     def readFile(self, filePath):
+        #Resource/臺中市市區公車站牌資料.CSV 
         
         busList=[]             
         with open(filePath,newline='',encoding='utf-8-sig') as csvFile:   #encoding='utf-8-sig'     
@@ -85,16 +67,6 @@ class Stop:
     def IDsAtStop(self, stop, busList):
        
         busIDList=[]
-        #region 迴圈記憶法
-        '''
-        temp=''
-        for i in busList:
-            if stop in i[self.stopName_CN]:
-                if temp == '' or temp != i[self.busID]:  
-                    busIDList.append(i[self.busID])
-                    temp=i[self.busID]
-        '''
-        #endregion
         
         for i in busList:
             if stop in i[self.stopName_CN]:
@@ -185,20 +157,6 @@ class Stop:
     def allBusID(self, busList): 
         
         busIDList=[]
-        #region 迴圈記憶法
-        '''
-        tempID=''
-        #buses=0        
-        for i in busList:
-            if tempID == '' or tempID != i[self.busID]:
-                busIDList.append(i[self.busID])
-                tempID=i[self.busID]
-        #buses=len(busIDList)
-        #print("臺中市公車共",buses,"條路線") 
-        
-        return busIDList
-        '''
-        #endregion
         
         for i in busList:
             busIDList.append(i[self.busID])
@@ -211,26 +169,9 @@ class Stop:
     #region 臺中市所有公車路線名稱
     def allBusName(self, busList):
         
-                
         busNameList=[]
-        #region 迴圈記憶法
-        '''
-        tempBusName=''        
-        for i in busList:
-            tempList=[]
-            if tempBusName == '' or tempBusName != i[self.busName]:
-                tempList.append(i[self.busID])
-                tempList.append(i[self.busName])
-                busNameList.append(tempList)
-                tempBusName=i[self.busName]         
-        
-        return busNameList      
-        '''
-        #endregion
         
         for i in busList:
-            # if [i[self.busID],i[self.busName]] not in busNameList:
-            #     busNameList.append([i[self.busID],i[self.busName]])
             self.unduplicateList(busNameList,[i[self.busID],i[self.busName]])
         return busNameList
                 
@@ -242,23 +183,7 @@ class Stop:
     def allBusStopsNum(self, busList, busIDList):
         
         listStopsNum=[]    
-        '''
-        for i in range(len(busIDList)):
-            listTemp=[]
-            stopsOB=0
-            stopsIB=0              
-            for row in busList:
-                if busIDList[i]==row[self.busID]:                    
-                    if self.roundTrip_ob==row[self.roundTrip]:                
-                        stopsOB+=1                         
-                    if self.roundTrip_ib==row[self.roundTrip]:                        
-                        stopsIB+=1                                      
-            listTemp.append(busIDList[i])
-            listTemp.append(stopsOB)
-            listTemp.append(stopsIB)
-            listStopsNum.append(listTemp)
-        '''
-        
+
         for i in busIDList:
             stopsOB=[]
             stopsIB=[]
@@ -304,8 +229,4 @@ class Stop:
         
     #endregion
     
-    #region 自動去除重覆清單
-    def autoUnduplicateList(self, duplicateList):
-        return list({frozenset(item.items()): item for item in duplicateList}.values())
-    #endregion
 #endregion
