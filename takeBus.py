@@ -11,8 +11,10 @@ from Bus_OOP import Stop, BusLine
 #參考 https://github.com/QiaoEnLiu/-Taichung-City-Bus-Transfer-
 #此程式碼以原始資料的顯示為主，多數串列為[{}, {}, {}, ...]
 
+theStop = Stop()
+
 pathDir = FilePath("臺中市市區公車站牌資料", "CSV").path()
-fileList = Stop.readFile(pathDir)
+fileList = theStop.readFile(pathDir)
 
 #region 「哈囉你好嗎？…………中興幹線」初始對話框
 class HelloBusDialog(QDialog, ui.helloBusDailog_ui.Ui_Dialog_HelloBus):
@@ -57,12 +59,32 @@ class TakeBusMainWindow(QMainWindow, ui.takeBusMainWindows_ui.Ui_takeGUI):
 
         self.headers = self.get_table_headers(self.table_TakeInfo)
         self.headersPath_TB = self.get_table_headers(self.table_Path)
-        self.takeBTN.clicked.connect(self.takeBus)
+
+
+        #region 連接事件
+        """
+        如果元件未在初始化中連接事件，會在後續元件反覆觸發事件中，之前的事件也會被保留並一同執行；
+        所以元件為確保只有一次的事件，需在初始化中連接事件，並撘配@pyqtSlot()進一步改善效能；
+        但撘乘公車後，因後續有「直達」及「轉乘」兩種條件而有兩種事件，且以同一元件使用，為避免反覆執行時造成先前的事件保留，
+        則預設事件為無，然後再選擇「直達」或「轉乘」之前，先將之前的連接解除；
+        """
+        self.takeBTN.clicked.connect(self.takeBus) # 只有一種事件
+        self.table_TakeInfo.itemClicked.connect() # 有「直達」及「轉乘」兩種條件
+        self.table_To_TF_Info.itemClicked.connect(self.TF_to) # 只有一種事件
+        self.table_TF_To_Info.itemClicked.connect(self.toDes) # 只有一種事件
+        self.tableDes.itemClicked.connect(self.reachDes) # 只有一種事件
+
+        #endregion
+
+        
     #endregion
 
+
     #region 撘公車
+    @pyqtSlot()
     def takeBus(self):
         print("\n-------------\n(self.takeBus)")
+
         #region 目的地及撘乘站
         self.desInfo=BusLine() #目的地站站點相關串列
         self.takeInfo=BusLine() #撘乘站站點相關串列
@@ -89,13 +111,13 @@ class TakeBusMainWindow(QMainWindow, ui.takeBusMainWindows_ui.Ui_takeGUI):
 
         #region 目的地站點及撘乘站點各公車及其路線延站
         self.des = self.lineEdit_Des.text()
-        self.desInfo.busesID=Stop.IDsAtStop(self.des, fileList)
-        self.desInfo.lineStops=Stop.busesAtStop(self.des, fileList)
+        self.desInfo.busesID = theStop.IDsAtStop(self.des, fileList)
+        self.desInfo.lineStops = theStop.busesAtStop(self.des, fileList)
         
         
         self.take = self.lineEdit_Take.text()
-        self.takeInfo.busesID=Stop.IDsAtStop(self.take, fileList)      
-        self.takeInfo.lineStops=Stop.busesAtStop(self.take, fileList)
+        self.takeInfo.busesID = theStop.IDsAtStop(self.take, fileList)      
+        self.takeInfo.lineStops = theStop.busesAtStop(self.take, fileList)
 
         self.findBus = f"從 {self.take} 前往 {self.des}：\n"
     
@@ -117,16 +139,11 @@ class TakeBusMainWindow(QMainWindow, ui.takeBusMainWindows_ui.Ui_takeGUI):
         
         #endregion
 
-
-        self.table_TakeInfo.itemClicked.connect(self.to_TF)
-        self.table_To_TF_Info.itemClicked.connect(self.TF_to)
-        self.table_TF_To_Info.itemClicked.connect(self.toDes)
-        self.tableDes.itemClicked.connect(self.reachDes)
-        self.tableDes.itemClicked.connect(self.showPath)
         
         #region 開始找公車撘
+        self.table_TakeInfo.itemClicked.disconnect() # 解除之前的事件
         #region 兩站是否在同一條路線上
-        self.sameLine = Stop.sameBus(self.desInfo.busesID, self.takeInfo.busesID)
+        self.sameLine = theStop.sameBus(self.desInfo.busesID, self.takeInfo.busesID)
         print(f"    (self.sameLine):{self.sameLine != None}")
         if self.sameLine:
             #region 可直達
@@ -137,13 +154,12 @@ class TakeBusMainWindow(QMainWindow, ui.takeBusMainWindows_ui.Ui_takeGUI):
             # self.takeToDesInfo += "\n從 {self.take} 撘乘："
             for i in self.takeInfo.lineStops:
                 for j in self.desInfo.lineStops:
-                    if Stop.stopsVector(i,j):
+                    if theStop.stopsVector(i,j):
                         correctTake.append(i)
-                        # print(f"{i[Stop.busID]}[{i[Stop.stopID]}]，",end='')
-                        # print(f"到 {j[Stop.stopName_CN]}[{j[Stop.stopID]}] 下車")
+                        # print(f"{i[theStop.busID]}[{i[theStop.stopID]}]，",end='')
+                        # print(f"到 {j[theStop.stopName_CN]}[{j[theStop.stopID]}] 下車")
             self.list_to_table(self.table_TakeInfo, correctTake, isShowPath=False)
-            self.table_TakeInfo.itemClicked.connect(self.toDes)
-
+            self.table_TakeInfo.itemClicked.connect(self.toDes) # 「直達」事件
             #endregion
         
        
@@ -152,86 +168,36 @@ class TakeBusMainWindow(QMainWindow, ui.takeBusMainWindows_ui.Ui_takeGUI):
             #兩站若沒有相同的公車路線，則需要轉乘
             self.takeBusInfo = f"----------------需要轉乘----------------\n"
             #region 目的地站及撘乘站所有的公車路線及延站 
-            self.desInfo.lines=Stop.stopInfo(self.desInfo.busesID, fileList)
-            self.takeInfo.lines=Stop.stopInfo(self.takeInfo.busesID, fileList)   
+            self.desInfo.lines = theStop.stopInfo(self.desInfo.busesID, fileList)
+            self.takeInfo.lines = theStop.stopInfo(self.takeInfo.busesID, fileList)   
             #endregion
 
             #region 找出行經撘乘站路線上與行經目的地站路線上相同的站點名稱
             for i in self.takeInfo.lines:
                 for j in self.desInfo.lines:
-                    if i[Stop.stopName_CN] == j[Stop.stopName_CN]: #為轉乘站
+                    if i[theStop.stopName_CN] == j[theStop.stopName_CN]: #為轉乘站
 
-                        Stop.unduplicateList(self.To_TF, i) # 撘乘站前往轉乘站的公車
-                        Stop.unduplicateList(self.TF_To, j) # 轉乘站前往目的地站的公車
+                        theStop.unduplicateList(self.To_TF, i) # 撘乘站前往轉乘站的公車
+                        theStop.unduplicateList(self.TF_To, j) # 轉乘站前往目的地站的公車
                         
-        
-            #endregion
-
-            #region （已停用）找出從撘乘站前往轉乘站的公車
-            '''
-            for i in self.takeInfo.lines:
-                for j in self.TF_Stops:
-                    if Stop.stopsVector(i,j):
-                        self.To_TF.append(j)
-            
-            self.To_TF = self.listToUnduplicated(self.To_TF)
-            '''
             #endregion
 
             #region 撘乘站TableWeight條列出可到轉乘站的公車
             for i in self.takeInfo.lineStops:
                 for j in self.To_TF:
-                    if Stop.stopsVector(i,j):
-                        Stop.unduplicateList(self.tableList_Take, i)
+                    if theStop.stopsVector(i,j):
+                        theStop.unduplicateList(self.tableList_Take, i)
             
 
             self.list_to_table(self.table_TakeInfo, self.tableList_Take, isShowPath=False)
             #endregion
-
-            #region （已停用）找出從轉乘站前往目的地站的公車
-            '''
-            for i in self.TF_Stops:
-                for j in self.desInfo.lines:
-                    if Stop.stopsVector(i,j):
-                        self.TF_To.append(i)
-            self.TF_To = self.listToUnduplicated(self.TF_To)
-            '''
-            #endregion
+            self.table_TakeInfo.itemClicked.connect(self.to_TF)  #「轉乘」事件（前往轉乘站）
+        
 
             #region Console測試路線組合
-            '''
-            tempBus=""
-            #region 從撘乘站
-            print(f"\n從 {self.take}")
             
-            #region 撘乘站
-            for i in self.To_TF:
-                #region 到轉乘站
-                if tempBus == '' or tempBus != i[Stop.busID]:
-                    tempBus=i[Stop.busID]
-                    print("-------------------------\n")
-                    print(f"--撘乘{i[Stop.busID]}[{i[Stop.roundTrip]}]公車")
-                #endregion
-            
-                #region 從轉乘站
-                            
-                for j in self.TF_To:
-                    if i[Stop.stopName_CN] == j[Stop.stopName_CN] :
-                        #region 到目的地站
-                        for k in self.desInfo.lineStops:
-                            if Stop.stopsVector(j,k):
-                                print(f"----到[{i[Stop.stopID]}] {i[Stop.stopName_CN]}",end='')
-                                print(f"[{j[Stop.stopID]}] ，轉乘{j[Stop.busID]}[{j[Stop.roundTrip]}]公車，",end='')
-                                print(f"抵達 {k[Stop.stopName_CN]}[{k[Stop.stopID]}]")
-                        #endregion
-                        
-                #endregion
-            #endregion
-            print("-------------------------")
-            '''
             #endregion
 
-            
 
             #endregion
 
@@ -241,6 +207,9 @@ class TakeBusMainWindow(QMainWindow, ui.takeBusMainWindows_ui.Ui_takeGUI):
         #endregion
 
     #endregion
+
+
+
 
     #region 列出抵達轉乘站的公車
     @pyqtSlot()
@@ -261,7 +230,7 @@ class TakeBusMainWindow(QMainWindow, ui.takeBusMainWindows_ui.Ui_takeGUI):
         self.take_To_TF = self.itemAllRow(selectedBus, self.table_TakeInfo)
         self.startTakeInfo = f"\n撘乘：\n{self.take_To_TF}\n"
         for row in self.To_TF:
-            if Stop.stopsVector(self.take_To_TF[0], row):
+            if theStop.stopsVector(self.take_To_TF[0], row):
                 to_TF_temp.append(row)
 
         #region以下為避免找到只有「目的地站往轉乘站」的公車
@@ -270,10 +239,10 @@ class TakeBusMainWindow(QMainWindow, ui.takeBusMainWindows_ui.Ui_takeGUI):
 
         for row_2TF in to_TF_temp: # 到轉乘站的公車
             for row_TF2 in self.TF_To: # 到目的地站的轉乘站的公車
-                if row_2TF[Stop.stopName_CN] == row_TF2[Stop.stopName_CN]: # 換乘（同一站換撘）
+                if row_2TF[theStop.stopName_CN] == row_TF2[theStop.stopName_CN]: # 換乘（同一站換撘）
                     for rowDes in self.desInfo.lineStops: # 到目的地站的公車
-                        if Stop.stopsVector(row_TF2, rowDes): # 由轉乘站到目的地站
-                            Stop.unduplicateList(self.tableList_To_TF, row_2TF) 
+                        if theStop.stopsVector(row_TF2, rowDes): # 由轉乘站到目的地站
+                            theStop.unduplicateList(self.tableList_To_TF, row_2TF) 
         #endregion
 
         self.list_to_table(self.table_To_TF_Info, self.tableList_To_TF, isShowPath=False)
@@ -297,13 +266,14 @@ class TakeBusMainWindow(QMainWindow, ui.takeBusMainWindows_ui.Ui_takeGUI):
         self.do_TF = self.itemAllRow(selectedStop, self.table_To_TF_Info)
         self.to_tf_Info = f"\n至\n{self.do_TF}\n"
         for row in self.TF_To:
-            if self.do_TF[0][Stop.stopName_CN] == row[Stop.stopName_CN]:
+            if self.do_TF[0][theStop.stopName_CN] == row[theStop.stopName_CN]:
                 self.tableList_TF_To.append(row)
         for take in self.tableList_TF_To:
             for stop in self.desInfo.lineStops:
-                if Stop.stopsVector(take, stop):
+                if theStop.stopsVector(take, stop):
                     toDesList.append(take)
         self.list_to_table(self.table_TF_To_Info, toDesList, isShowPath=False)
+
 
     #endregion
 
@@ -322,6 +292,7 @@ class TakeBusMainWindow(QMainWindow, ui.takeBusMainWindows_ui.Ui_takeGUI):
             stopInfo = self.table_TakeInfo
             selectedBus = self.table_TakeInfo.selectedItems()
             take = self.itemAllRow(selectedBus, stopInfo)
+            self.takeToDes = take
 
         else:
             # 要轉乘
@@ -332,14 +303,14 @@ class TakeBusMainWindow(QMainWindow, ui.takeBusMainWindows_ui.Ui_takeGUI):
             take = self.itemAllRow(selectedBus, stopInfo)
             self.tf_to_info = f"\n轉乘：\n{take}\n"
             # print(self.tf_to_info)
-        
-        
-        self.tf_to_des = take
+            self.tf_to_des = take
+
         self.tableDes.setRowCount(len(take))
         
         for stop in self.desInfo.lineStops:
-            if Stop.stopsVector(take[0], stop):
+            if theStop.stopsVector(take[0], stop):
                 self.listRowToTableItem(self.tableDes, 0, stop, isShowPath=False)
+
         
     #endregion
 
@@ -358,18 +329,19 @@ class TakeBusMainWindow(QMainWindow, ui.takeBusMainWindows_ui.Ui_takeGUI):
                     self.reachInfo
         # self.takeToDesLabel.setText(self.takeToDesInfo)
         # print(self.takeToDesInfo)
+        self.showPath()
         
 
     #endregion
 
 
     #region 顯示路徑
-    @pyqtSlot()
+    # @pyqtSlot()
     def showPath(self):
         print("\n---\n(self.showPath)\n-------------")
 
         self.cleanTable(self.table_Path)
-
+        # self.table_Path與其他table不同多了一「行為」欄
         takeStr = {self.pathPhase: "撘乘"}
         to_tf_Str = {self.pathPhase: "到轉乘站"}
         tf_to_Str = {self.pathPhase: "由轉乘站"}
@@ -377,15 +349,18 @@ class TakeBusMainWindow(QMainWindow, ui.takeBusMainWindows_ui.Ui_takeGUI):
 
         phase=[]
 
-        self.take_To_TF[0].update(takeStr)
-        phase.append(self.take_To_TF[0])
 
         if self.sameLine:
-            pass
+            # 直達
+            self.takeToDes[0].update(takeStr)
+            phase.append(self.takeToDes[0])
         else:
+            # 轉乘
+            self.take_To_TF[0].update(takeStr)
             self.do_TF[0].update(to_tf_Str)
             self.tf_to_des[0].update(tf_to_Str)
 
+            phase.append(self.take_To_TF[0])
             phase.append(self.do_TF[0])
             phase.append(self.tf_to_des[0])
 
@@ -398,9 +373,7 @@ class TakeBusMainWindow(QMainWindow, ui.takeBusMainWindows_ui.Ui_takeGUI):
     #endregion
 
     
-
-
-    #region 其他方法
+    #region 其他針對QTableWidget方法
 
     #region 取得QTableWidget所有的欄位名稱
     def get_table_headers(self, table):
@@ -412,34 +385,30 @@ class TakeBusMainWindow(QMainWindow, ui.takeBusMainWindows_ui.Ui_takeGUI):
         return headers
     #endregion
 
-    #region Table資料清除
+
+    #region QTableWidget資料清除
     def cleanTable(self, table):
         table.clearContents()
         table.setRowCount(0)
 
     #endregion
 
-    #region （已不使用）串列元素不重覆
-    #特別為原始資料的顯示，多數串列為[{}, {}, {}, ...]
-    def listToUnduplicated(self, dupList):
-        return list({frozenset(item.items()): item for item in dupList}.values())
-    #endregion
-
     #region 由於QTableWidget顯示原始資料，當一列中的項目被選擇時，則輸出該列
     def itemAllRow(self, selectedItem, table):
         if selectedItem:
-            row = selectedItem[self.headers.index(Stop.busID)].row()
+            row = selectedItem[self.headers.index(theStop.busID)].row()
             rowData = [table.item(row, column).text() for column in range(table.columnCount())]
             return self.item_to_list(rowData)
     #endregion
 
     #region 將QTableWidget的列轉成字典並存到串列
+    # #特別為原始資料的顯示，多數串列結構為[{}, {}, {}, ...]
     def item_to_list(self, data):
         # 檢查是否有資料
         if not data:
             return []
 
-        # 創建包含字典的列表
+        # 創建包含字典的串列
         dict_list = [{header: value for header, value in zip(self.headers, data)}]
 
         return dict_list
@@ -456,22 +425,29 @@ class TakeBusMainWindow(QMainWindow, ui.takeBusMainWindows_ui.Ui_takeGUI):
     #region 字典每個索引對應到相同名稱的QTableWidget欄位，並將資料加入
     def listRowToTableItem(self, table, i, stop, isShowPath):
         if isShowPath:
+            # self.table_Path與其他table不同多了一「行為」欄
             headers=self.headersPath_TB
             table.setItem(i, headers.index(self.pathPhase),
                           QTableWidgetItem(stop[self.pathPhase]))
         else:
             headers=self.headers
 
-        table.setItem(i, headers.index(Stop.busID), QTableWidgetItem(stop[Stop.busID]))
-        table.setItem(i, headers.index(Stop.busName), QTableWidgetItem(stop[Stop.busName]))
-        table.setItem(i, headers.index(Stop.roundTrip), QTableWidgetItem(stop[Stop.roundTrip]))
-        table.setItem(i, headers.index(Stop.stopID), QTableWidgetItem(stop[Stop.stopID]))
-        table.setItem(i, headers.index(Stop.stopName_CN), QTableWidgetItem(stop[Stop.stopName_CN]))
-        table.setItem(i, headers.index(Stop.stopName_EN), QTableWidgetItem(stop[Stop.stopName_EN]))
-        table.setItem(i, headers.index(Stop.latitude), QTableWidgetItem(stop[Stop.latitude]))
-        table.setItem(i, headers.index(Stop.longitude), QTableWidgetItem(stop[Stop.longitude]))
+        table.setItem(i, headers.index(theStop.busID), QTableWidgetItem(stop[theStop.busID]))
+        table.setItem(i, headers.index(theStop.busName), QTableWidgetItem(stop[theStop.busName]))
+        table.setItem(i, headers.index(theStop.roundTrip), QTableWidgetItem(stop[theStop.roundTrip]))
+        table.setItem(i, headers.index(theStop.stopID), QTableWidgetItem(stop[theStop.stopID]))
+        table.setItem(i, headers.index(theStop.stopName_CN), QTableWidgetItem(stop[theStop.stopName_CN]))
+        table.setItem(i, headers.index(theStop.stopName_EN), QTableWidgetItem(stop[theStop.stopName_EN]))
+        table.setItem(i, headers.index(theStop.latitude), QTableWidgetItem(stop[theStop.latitude]))
+        table.setItem(i, headers.index(theStop.longitude), QTableWidgetItem(stop[theStop.longitude]))
     #endregion
 
+    #endregion
+
+    #region （已不使用）串列元素不重覆
+    #特別為原始資料的顯示，多數串列為[{}, {}, {}, ...]
+    def listToUnduplicated(self, dupList):
+        return list({frozenset(item.items()): item for item in dupList}.values())
     #endregion
 
 #endregion
