@@ -66,17 +66,23 @@ class TakeBusMainWindow(QMainWindow, ui.takeBusMainWindows_ui.Ui_takeGUI):
         如果元件未在初始化中連接事件，會在後續元件反覆觸發事件中，之前的事件也會被保留並一同執行；
         所以元件為確保只有一次的事件，需在初始化中連接事件，並撘配@pyqtSlot()進一步改善效能；
         但撘乘公車後，因後續有「直達」及「轉乘」兩種條件而有兩種事件，且以同一元件使用，為避免反覆執行時造成先前的事件保留，
-        則預設事件為無，然後再選擇「直達」或「轉乘」之前，先將之前的連接解除；
+        則預設事件為空事件，然後再選擇「直達」或「轉乘」之前，先將之前的連接解除；
         """
-        self.takeBTN.clicked.connect(self.takeBus) # 只有一種事件
-        self.table_TakeInfo.itemClicked.connect() # 有「直達」及「轉乘」兩種條件
-        self.table_To_TF_Info.itemClicked.connect(self.TF_to) # 只有一種事件
-        self.table_TF_To_Info.itemClicked.connect(self.toDes) # 只有一種事件
-        self.tableDes.itemClicked.connect(self.reachDes) # 只有一種事件
+        self.takeBTN.clicked.connect(self.takeBus)
+        self.table_TakeInfo.itemClicked.connect(self.emptyAction)
+        self.table_To_TF_Info.itemClicked.connect(self.TF_to)
+        self.table_TF_To_Info.itemClicked.connect(self.toDes)
+        self.tableDes.itemClicked.connect(self.reachDes)
 
         #endregion
 
         
+    #endregion
+
+    #region 空事件
+    @pyqtSlot()
+    def emptyAction(self):
+        pass
     #endregion
 
 
@@ -141,11 +147,13 @@ class TakeBusMainWindow(QMainWindow, ui.takeBusMainWindows_ui.Ui_takeGUI):
 
         
         #region 開始找公車撘
-        self.table_TakeInfo.itemClicked.disconnect() # 解除之前的事件
+        self.table_TakeInfo.itemClicked.disconnect() #解除之前的連接
+
         #region 兩站是否在同一條路線上
         self.sameLine = theStop.sameBus(self.desInfo.busesID, self.takeInfo.busesID)
         print(f"    (self.sameLine):{self.sameLine != None}")
         if self.sameLine:
+
             #region 可直達
             #兩站有相同的公車路線，則不需要轉乘
             correctTake = []
@@ -164,6 +172,7 @@ class TakeBusMainWindow(QMainWindow, ui.takeBusMainWindows_ui.Ui_takeGUI):
         
        
         else:
+
             #region 要轉乘
             #兩站若沒有相同的公車路線，則需要轉乘
             self.takeBusInfo = f"----------------需要轉乘----------------\n"
@@ -191,13 +200,7 @@ class TakeBusMainWindow(QMainWindow, ui.takeBusMainWindows_ui.Ui_takeGUI):
 
             self.list_to_table(self.table_TakeInfo, self.tableList_Take, isShowPath=False)
             #endregion
-            self.table_TakeInfo.itemClicked.connect(self.to_TF)  #「轉乘」事件（前往轉乘站）
-        
-
-            #region Console測試路線組合
-            
-            #endregion
-
+            self.table_TakeInfo.itemClicked.connect(self.to_TF)  #「轉乘」事件（前往轉乘站）        
 
             #endregion
 
@@ -207,9 +210,6 @@ class TakeBusMainWindow(QMainWindow, ui.takeBusMainWindows_ui.Ui_takeGUI):
         #endregion
 
     #endregion
-
-
-
 
     #region 列出抵達轉乘站的公車
     @pyqtSlot()

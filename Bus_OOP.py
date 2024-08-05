@@ -90,7 +90,9 @@ class Stop:
     #region 是否有公車可直達
     def sameBus(self, desBus, takeBus): 
         #轉乘程式碼中，判斷是否需要轉乘
-            
+        
+        #撘乘站與目的地站是否有相同的公車
+        #（未測試「公車若只停靠單邊」）
         for i in desBus:
             for j in takeBus:
                 if i == j:
